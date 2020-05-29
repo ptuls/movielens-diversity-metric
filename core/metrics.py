@@ -36,8 +36,7 @@ def compute_score(model, movies, ratings, center):
     user's center and the cosine similarity between each movie vector and the center.
     We assume ratings are positive.
     """
-    score = 0
-    total_weight = 0
+    score, total_weight = 0, 0
     for i in range(len(movies)):
         movie = movies[i]
         rating = ratings[i]
