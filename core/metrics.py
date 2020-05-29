@@ -16,15 +16,17 @@ def compute_center(model, movies, ratings):
     center = np.zeros((model.vector_size,))
     total_weight = 0
     # iterating this way handles the problem when a movie might not be found in the model
-    for i in range(len(movies)):
-        movie = movies[i]
-        rating = ratings[i]
+    i = 0
+    for movie in movies:
         try:
             movie_vec = model[movie]
+            rating = ratings[i]
             center += rating * movie_vec
             total_weight += rating
+            i += 1
         except KeyError:
             logger.warning(f"{movie} not contained in model")
+            i += 1
             continue
     center /= total_weight
     return center
@@ -37,15 +39,17 @@ def compute_score(model, movies, ratings, center):
     We assume ratings are positive.
     """
     score, total_weight = 0, 0
-    for i in range(len(movies)):
-        movie = movies[i]
-        rating = ratings[i]
+    i = 0
+    for movie in movies:
         try:
             movie_vec = model[movie]
+            rating = ratings[i]
             score += rating * cosine_similarity(movie_vec, center)
             total_weight += rating
+            i += 1
         except KeyError:
             logger.warning(f"{movie} not contained in model")
+            i += 1
             continue
 
     # removing some numerical errors
