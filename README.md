@@ -12,7 +12,7 @@ The code here accompanies the article "Different Strokes for Different Folks atÂ
 
 We recommend using Anaconda to create a virtual environment. Install the requirements via
 ```
-conda install 
+conda install --yes --file requirements.txt 
 ```
 or if using `pip`, run
 ```
