@@ -9,7 +9,7 @@ def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 
-def compute_center(model, movies, ratings):
+def compute_center(model, movies_ratings, verbose):
     """
     Compute the center of user movie vectors.
     """
@@ -17,22 +17,21 @@ def compute_center(model, movies, ratings):
     total_weight = 0
     # iterating this way handles the problem when a movie might not be found in the model
     i = 0
-    for movie in movies:
+    for movie in movies_ratings:
         try:
             movie_vec = model[movie]
-            rating = ratings[i]
+            rating = movies_ratings[movie]
             center += rating * movie_vec
             total_weight += rating
-            i += 1
         except KeyError:
-            logger.warning(f"{movie} not contained in model")
-            i += 1
+            if verbose:
+                logger.warning(f"{movie} not contained in model")
             continue
     center /= total_weight
     return center
 
 
-def compute_score(model, movies, ratings, center):
+def compute_score(model, movies_ratings, center, verbose):
     """
     Once we have computed the center we can then compute the GS-score based on the
     user's center and the cosine similarity between each movie vector and the center.
@@ -40,27 +39,26 @@ def compute_score(model, movies, ratings, center):
     """
     score, total_weight = 0, 0
     i = 0
-    for movie in movies:
+    for movie in movies_ratings:
         try:
             movie_vec = model[movie]
-            rating = ratings[i]
+            rating = movies_ratings[movie]
             score += rating * cosine_similarity(movie_vec, center)
             total_weight += rating
-            i += 1
         except KeyError:
-            logger.warning(f"{movie} not contained in model")
-            i += 1
+            if verbose:
+                logger.warning(f"{movie} not contained in model")
             continue
 
     # removing some numerical errors
     return score / max(total_weight, 1.0)
 
 
-def generalist_specialist_score(model, movies, ratings):
+def generalist_specialist_score(model, movies_ratings, verbose=False):
     """
     Based on the generalist-specialist score from Anderson et al.,
     "Algorithmic Effects on the Diversity of Consumption on Spotify".
     """
-    center = compute_center(model, movies, ratings)
-    score = compute_score(model, movies, ratings, center)
+    center = compute_center(model, movies_ratings, verbose)
+    score = compute_score(model, movies_ratings, center, verbose)
     return score
