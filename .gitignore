@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 __pycache__/
 
+# specific
 .vscode/
+.ipynb_checkpoints/
