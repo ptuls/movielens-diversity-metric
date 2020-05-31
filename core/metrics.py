@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from collections import Counter
+from math import log
 import numpy as np
 
 
@@ -62,3 +64,16 @@ def generalist_specialist_score(model, movies_ratings, verbose=False):
     center = compute_center(model, movies_ratings, verbose)
     score = compute_score(model, movies_ratings, center, verbose)
     return score
+    
+
+def compute_shannon_entropy(movie_list):
+    """
+    Compute Shannon Entropy of a user's movie diversity.
+    """
+    total_movies = len(movie_list)
+    view_count = Counter(movie_list)
+    H = 0
+    for value in view_count.values():
+        p = value / total_movies
+        H += -p * log(p, 2)
+    return H
