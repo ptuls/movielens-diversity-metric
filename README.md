@@ -24,15 +24,19 @@ To run the notebook, simply start a Jupyter notebook session via `jupyter notebo
 The notebook should be able to download the MovieLens dataset and unzip it in the 
 current directory.
 
+**Warning!**
+
 Training of the model and scoring the generalist-specialist (GS) scores of all users 
 on the MovieLens dataset can be time consuming.
 
 ## Results
 
-The results of the GS scores for MovieLens users are shown here:
+The results of the Shannon entropy and GS scores for MovieLens users are shown here:
+![](./assets/shannon_entropy_movielens.png)
+
 ![](./assets/gs_score_movielens.png)
 
-As can be seen from the histogram above, the majority of users have a wide range of movies watched
+As seen from the histogram above, the majority of users have a wide range of movies watched
 and rated. The spike at the 1.0 bin are mainly due to users who have only watched and rated a single
 movie. There are 857 users who watched and rated more than a single movie with a GS score of above 0.90
 using our trained Word2Vec model.
