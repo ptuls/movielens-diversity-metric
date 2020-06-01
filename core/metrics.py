@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import numpy as np
 from collections import Counter
 from math import log
-import numpy as np
 
 
 def cosine_similarity(a, b):
@@ -70,10 +70,10 @@ def compute_shannon_entropy(movie_list):
     """
     Compute Shannon Entropy of a user's movie diversity.
     """
-    total_movies = len(movie_list)
     view_count = Counter(movie_list)
-    H = 0
+    total_movies = sum(view_count.values())
+    entropy = 0
     for value in view_count.values():
         p = value / total_movies
-        H += -p * log(p, 2)
-    return H
+        entropy += -p * log(p, 2)
+    return entropy
